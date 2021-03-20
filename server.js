@@ -9,8 +9,8 @@ function returnDefaultText(res) {
   res.send(infoText);
 }
 
-const swaggerUi = require('swagger-ui-express'),
-swaggerDocument = require('./swagger.json');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 function callBackWithError(res) {
   return (err, addr) => {
@@ -51,7 +51,6 @@ app.get('/address', (req, res) => {
       returnDefaultText(res);
       break;
   }
-
 });
 
 app.get('/*', (req, res) => {

@@ -9,6 +9,9 @@ function returnDefaultText(res) {
   res.send(infoText);
 }
 
+const swaggerUi = require('swagger-ui-express'),
+swaggerDocument = require('./swagger.json');
+
 function callBackWithError(res) {
   return (err, addr) => {
     if (err) {
@@ -18,6 +21,8 @@ function callBackWithError(res) {
     }
   };
 }
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/address', (req, res) => {
   const { type, parameters } = req.query;

@@ -3,7 +3,7 @@
     "servers": [
         {
             "description": "Development - Network-Address-Provider-Api",
-            "url": "http://localhost:3020"
+            "url": "http://localhost:3005"
         }
     ],
     "info": {
@@ -18,45 +18,22 @@
         }
     ],
     "paths": {
-        "/live": {
+        "/address": {
             "get": {
                 "tags": [
-                    "live"
+                    "address"
                 ],
-                "summary": "getLiveData",
-                "description": "Get live data for given units and tags",
-                "operationId": "getLiveData",
+                "summary": "getAddress",
+                "description": "getAddress",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/apiVersionHeader"
+                        "$ref": "#/components/parameters/package"
                     },
                     {
-                        "$ref": "#/components/parameters/productHeader"
+                        "$ref": "#/components/parameters/type"
                     },
                     {
-                        "$ref": "#/components/parameters/unitsQuery"
-                    },
-                    {
-                        "$ref": "#/components/parameters/tagsQuery"
-                    },
-                    {
-                        "$ref": "#/components/parameters/requestTypeQuery"
-                    },
-                    {
-                        "$ref": "#/components/parameters/groupTypeQuery"
-                    },
-                    {
-                        "$ref": "#/components/parameters/groupOperationQuery"
-                    },
-                    {
-                        "name": "enumaration",
-                        "in": "query",
-                        "description": "it should use for actual value of enumaration",
-                        "required": false,
-                        "schema": {
-                            "type": "boolean",
-                            "example": "true"
-                        }
+                        "$ref": "#/components/parameters/parameters"
                     }
                 ],
                 "responses": {
@@ -65,7 +42,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/getLiveDataResponse"
+                                    "$ref": "#/components/schemas/testSchema"
                                 }
                             }
                         }
@@ -75,290 +52,54 @@
         }
     },
     "components": {
-        "schemas": {},
+        "schemas": {
+            "testSchema": {}
+        },
         "parameters": {
-            "apiVersionHeader": {
-                "name": "accept-version",
-                "in": "header",
-                "description": "api version of unitdata",
-                "required": true,
+            "package": {
+                "name": "package",
+                "in": "query",
+                "description": "'package' parameter gives you opportunity for selecting node package.",
+                "required": false,
+                "style": "form",
+                "explode": true,
                 "schema": {
                     "type": "string",
                     "enum": [
-                        "v1",
-                        "v2"
+                        "node",
+                        "address"
                     ],
-                    "example": "v2"
+                    "example": "address"
                 }
             },
-            "productHeader": {
-                "name": "inavitas-product",
-                "in": "header",
-                "description": "product type of app",
-                "required": true,
-                "schema": {
-                    "type": "string",
-                    "enum": [
-                        "b",
-                        "p",
-                        "u"
-                    ],
-                    "example": "p"
-                }
-            },
-            "unitsQuery": {
-                "name": "units",
-                "in": "query",
-                "description": "Numeric id of the Unit",
-                "required": true,
-                "style": "form",
-                "explode": false,
-                "schema": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    },
-                    "example": 56
-                }
-            },
-            "tagsQuery": {
-                "name": "tags",
-                "in": "query",
-                "description": "Type parameter is use to get data for particular tag",
-                "style": "form",
-                "explode": false,
-                "schema": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": "p,q,s"
-                }
-            },
-            "requestTypeQuery": {
+            "type": {
                 "name": "type",
                 "in": "query",
-                "description": "Type parameter is use to units is for parent unit or all each unit. If type is 'parentId', units should take only one unitId and return its own and child units values by using unit management to take all children units. If type is empty or 'unitIds'. It will work as old style (only returns comma seperated units data).",
-                "style": "form",
-                "explode": false,
-                "schema": {
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "enum": [
-                            "parentId",
-                            "unitIds"
-                        ]
-                    },
-                    "example": "unitIds"
-                }
-            },
-            "tagsQueryRequired": {
-                "name": "tags",
-                "in": "query",
-                "description": "Type parameter is use to get data for particular tag",
-                "required": true,
-                "style": "form",
-                "explode": false,
-                "schema": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": "p,q,s"
-                }
-            },
-            "proConsTagsQueryRequired": {
-                "name": "tags",
-                "in": "query",
-                "description": "Type parameter is use to get data for particular tag",
-                "required": true,
-                "style": "form",
-                "explode": false,
-                "schema": {
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "enum": [
-                            "impactive",
-                            "expactive"
-                        ]
-                    },
-                    "example": "p,q,s"
-                }
-            },
-            "operationQuery": {
-                "name": "operation",
-                "in": "query",
-                "description": "Type parameter is use to get data for particular type\n",
+                "description": "'type' parameter is for selecting address type.",
                 "required": true,
                 "style": "form",
                 "explode": true,
                 "schema": {
                     "type": "string",
                     "enum": [
-                        "auto",
-                        "avg",
-                        "diff",
-                        "max",
-                        "min",
-                        "sum",
-                        "first",
-                        "last",
-                        "r"
-                    ],
-                    "example": "avg"
-                }
-            },
-            "periodQuery": {
-                "name": "period",
-                "in": "query",
-                "description": "Period parameter is use to get data for particular type\n",
-                "required": true,
-                "style": "form",
-                "explode": true,
-                "schema": {
-                    "type": "string",
-                    "enum": [
-                        "1",
-                        "5",
-                        "10",
-                        "15",
-                        "30",
-                        "H",
-                        "D",
-                        "W",
-                        "M",
-                        "Y",
-                        "r"
-                    ],
-                    "example": "H"
-                }
-            },
-            "startDateQuery": {
-                "name": "startDate",
-                "in": "query",
-                "description": "Date range's start",
-                "required": true,
-                "schema": {
-                    "type": "string",
-                    "format": "date",
-                    "default": "2020-07-01 00:00:00"
-                }
-            },
-            "endDateQuery": {
-                "name": "endDate",
-                "in": "query",
-                "description": "Date range's end",
-                "required": true,
-                "schema": {
-                    "type": "string",
-                    "format": "date",
-                    "default": "2021-01-01 00:00:00"
-                }
-            },
-            "groupTypeQuery": {
-                "name": "groupType",
-                "in": "query",
-                "description": "",
-                "required": true,
-                "style": "form",
-                "explode": true,
-                "schema": {
-                    "type": "string",
-                    "enum": [
-                        "none",
                         "all",
-                        "group"
+                        "ip",
+                        "ipv6",
+                        "mac",
+                        "interface",
+                        "dns"
                     ],
-                    "example": "none",
-                    "default": "none"
+                    "example": "all"
                 }
             },
-            "groupOperationQuery": {
-                "name": "groupTypeOperation",
+            "parameters": {
+                "name": "parameters",
                 "in": "query",
-                "description": "",
+                "description": "'parameters' parameter is for comma seperated additional parameters.",
                 "required": false,
-                "style": "form",
-                "explode": true,
                 "schema": {
-                    "type": "string",
-                    "enum": [
-                        "avg",
-                        "max",
-                        "merge",
-                        "sum"
-                    ],
-                    "example": "merge"
-                }
-            },
-            "unitIdQuery": {
-                "name": "unitId",
-                "in": "query",
-                "description": "Numeric ID of the Unit",
-                "required": true,
-                "schema": {
-                    "type": "integer",
-                    "example": 144
-                }
-            },
-            "typeQuery": {
-                "name": "type",
-                "in": "query",
-                "description": "Type parameter is use to get data for particular type\n",
-                "required": true,
-                "style": "form",
-                "explode": true,
-                "schema": {
-                    "type": "string"
-                }
-            },
-            "tagsQueryRequiredImpExp": {
-                "name": "tags",
-                "in": "query",
-                "description": "Type parameter is use to get data for particular type\n",
-                "required": true,
-                "style": "form",
-                "explode": true,
-                "schema": {
-                    "type": "string",
-                    "enum": [
-                        "impactive",
-                        "expactive"
-                    ]
-                }
-            },
-            "realQuery": {
-                "name": "real",
-                "in": "query",
-                "description": "Real or Net Data check",
-                "required": false,
-                "style": "form",
-                "explode": true,
-                "schema": {
-                    "type": "boolean"
-                }
-            },
-            "intensityQuery": {
-                "name": "intensity",
-                "in": "query",
-                "description": "Intensity parameter is use to get avg value\n",
-                "required": false,
-                "style": "form",
-                "explode": true,
-                "schema": {
-                    "type": "boolean"
-                }
-            },
-            "dateQuery": {
-                "name": "date",
-                "in": "query",
-                "description": "Date",
-                "required": true,
-                "schema": {
-                    "type": "string",
-                    "format": "date"
+                  "type": "string",
+                "default": ""
                 }
             }
         }
